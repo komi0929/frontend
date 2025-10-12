@@ -1,0 +1,96 @@
+// ===== あんしんディスプレイ - Prisma スキーマ (MongoDB) =====
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  email         String         @unique
+  role          String         @default("shop_owner")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  
+  subscription  Subscription?
+  sessions      Session[]
+  micShipment   MicShipment?
+  
+  @@map("users")
+}
+
+model Subscription {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @unique @db.ObjectId
+  stripeCustomerId  String   @unique
+  stripePriceId     String
+  status            String   // active, trialing, canceled, past_due
+  currentPeriodEnd  DateTime
+  trialEnd          DateTime?
+  cancelAtPeriodEnd Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("subscriptions")
+}
+
+model Session {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId           String    @db.ObjectId
+  selectedLanguage String    // en, ko, zh
+  startedAt        DateTime  @default(now())
+  endedAt          DateTime?
+  messageCount     Int       @default(0)
+  
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages         Message[]
+  
+  @@map("sessions")
+}
+
+model Message {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionId          String   @db.ObjectId
+  detectedLanguage   String   // en, ja, ko, zh
+  originalText       String
+  translatedText     String
+  sttLatencyMs       Int
+  translateLatencyMs Int
+  createdAt          DateTime @default(now())
+  
+  session            Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  @@map("messages")
+}
+
+model MicShipment {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String    @unique @db.ObjectId
+  status     String    // pending, shipped, returned, kept
+  address    String
+  shippedAt  DateTime?
+  returnedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("mic_shipments")
+}
+
+model EventLog {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String?  @db.ObjectId
+  sessionId String?  @db.ObjectId
+  type      String   // session_started, stt_completed, translation_completed, etc.
+  payload   Json?
+  createdAt DateTime @default(now())
+  
+  @@map("event_logs")
+}

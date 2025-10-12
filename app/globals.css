@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== あんしんディスプレイ - PRD v2.1 CSS Variables ===== */
+:root {
+  /* ===== 背景色 (PRD v2.2) ===== */
+  --bg-main: #F5F1E8;           /* v2.1: #FAFAF8 → 温かみのあるベージュ */
+  --bg-card: #FFFFFF;           /* 新規追加: カード背景 */
+  --bg-error: #FFE8D6;          /* v2.1: #FFF3CD → ピーチ系 */
+  --border-error: #FFB88C;      /* v2.1: #FFC107 → 柔らかいオレンジ */
+  
+  /* ===== テキスト色 (PRD v2.2) ===== */
+  --text-primary: #5A5A5A;      /* v2.1: #4A4A4A → やや明るく */
+  --text-secondary: #8B8B8B;    /* v2.1: #666666 → 柔らかく */
+  --text-translated: #6B9080;   /* v2.1: #D97706 → ターコイズグリーン */
+  --text-white: #FFFFFF;        /* 変更なし */
+  --text-footer: #999999;       /* 新規追加: フッターテキスト */
+  
+  /* ===== アクセントカラー (PRD v2.2) ===== */
+  --accent-primary: #7FCDCD;    /* v2.1: #F59E0B → ミントブルー */
+  --accent-secondary: #A8D5BA;  /* 新規追加: セカンダリカラー */
+  
+  /* ===== バー色 (PRD v2.2) ===== */
+  --bar-customer: #7FCDCD;      /* v2.1: #2196F3 → ミントブルー */
+  --bar-staff: #EAA89A;         /* v2.1: #F59E0B → コーラルピンク */
+  
+  /* ===== ステータス色 (PRD v2.2) ===== */
+  --status-listening: #EAA89A;  /* v2.1: #EF4444 → 柔らかい赤 */
+  --status-idle: #B8C5D0;       /* v2.1: #9CA3AF → 柔らかいグレー */
+  
+  /* ===== 新規追加: 言語カード色 (PRD v2.2) ===== */
+  --card-english-start: #5EB8B8;      /* ターコイズブルー（グラデーション開始） */
+  --card-english-end: #4A9E9E;        /* グラデーション終了 */
+  --card-korean-start: #D98A7A;       /* コーラルオレンジ（グラデーション開始） */
+  --card-korean-end: #C76E5E;         /* グラデーション終了 */
+  --card-chinese-start: #D085AD;      /* ピンク（グラデーション開始） */
+  --card-chinese-end: #BE6F9B;        /* グラデーション終了 */
+  
+  /* ===== Typography (PRD v2.2) ===== */
+  --font-logo-footer: 12px;     /* 新規追加: フッターロゴ */
+  --font-welcome-body: 20px;    /* v2.1: 18px → 読みやすく拡大 */
+  --font-language-prompt: 24px; /* 新規追加: 言語選択プロンプト */
+  --font-button: 28px;          /* v2.1: 32px → やや縮小 */
+  --font-status: 18px;          /* 変更なし */
+  --font-guide: 24px;           /* 変更なし */
+  --font-original: 28px;        /* v2.1: 32px → 実用的サイズに */
+  --font-translated: 36px;      /* v2.1: 40px → 実用的サイズに */
+  
+  --line-height-normal: 1.5;
+  --line-height-translated: 1.4;
+  
+  /* ===== Spacing (変更なし) ===== */
+  --space-between-messages: 24px;
+  --space-within-message: 16px;
+  
+  /* ===== Sizing (PRD v2.2) ===== */
+  --bar-width: 6px;             /* 変更なし */
+  --button-height: 80px;        /* 変更なし */
+  --button-radius: 16px;        /* v2.1: 12px → より柔らかく */
+  --card-radius: 20px;          /* 新規追加: カード用 */
+  --message-radius: 18px;       /* 新規追加: メッセージ用 */
+  --mic-icon-size: 64px;        /* 変更なし */
+  
+  /* ===== Animation (PRD v2.2) ===== */
+  --transition-fast: 0.2s;      /* 変更なし */
+  --transition-normal: 0.3s;    /* 変更なし */
+  --transition-slow: 0.5s;      /* 変更なし */
+  --breathe-duration: 3s;       /* v2.1: 2s → よりゆっくり */
+}
+
+/* Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* レスポンシブ警告 */
+.size-warning {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #FFC107;
+  color: #000;
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 9999;
+}
+
+.orientation-warning {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  z-index: 9999;
+  max-width: 400px;
+}
+
+.orientation-warning::before {
+  content: '📱→🖥️';
+  font-size: 48px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+/* メディアクエリ */
+@media (max-width: 767px), (max-height: 599px) {
+  .size-warning {
+    display: block;
+  }
+}
+
+@media (orientation: portrait) {
+  .orientation-warning {
+    display: block;
+  }
+}
+
+/* アクセシビリティ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
