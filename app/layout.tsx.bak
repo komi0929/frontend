@@ -1,0 +1,21 @@
+import "./globals.css";
+import "./prd.css";
+import type { Metadata } from "next";
+import { Noto_Sans_JP } from "next/font/google";
+
+const noto = Noto_Sans_JP({ subsets: ["latin"], display: "swap", preload: true, weight: ["400","500","700"] });
+
+export const metadata: Metadata = {
+  title: "あんしんディスプレイ",
+  description: "お手持ちのタブレットで、今すぐ“通じるおもてなし”。",
+  icons: { icon: "/favicon.ico" },
+  manifest: "/manifest.json"
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ja">
+      <body className={noto.className}>{children}</body>
+    </html>
+  );
+}

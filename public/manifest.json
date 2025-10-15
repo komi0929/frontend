@@ -1,0 +1,11 @@
+{
+  "name": "あんしんディスプレイ",
+  "short_name": "Anshin",
+  "start_url": "/display",
+  "display": "standalone",
+  "theme_color": "#6B9080",
+  "background_color": "#ffffff",
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "16x16 24x24 32x32 64x64", "type": "image/x-icon" }
+  ]
+}

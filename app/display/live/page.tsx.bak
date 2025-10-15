@@ -1,0 +1,64 @@
+"use client";
+import { useState, useEffect } from "react";
+import StatusBar from "@/components/display/StatusBar";
+import MessageList from "@/components/display/MessageList";
+import VoiceCapture from "@/components/display/VoiceCapture";
+
+type Msg = { role: "customer"|"staff"; original: string; translated?: string };
+
+export default function DisplayLive(){
+  const [listening, setListening] = useState(false);
+  const [messages, setMessages] = useState<Msg[]>([]);
+  const [err, setErr] = useState("");
+
+  // ❗エラーは3秒で自動クリア（PRDのUX要件）
+  useEffect(() => {
+    if (err) {
+      const t = setTimeout(() => setErr(""), 3000);
+      return () => clearTimeout(t);
+    }
+  }, [err]);
+
+  async function handleRecognized(text: string){
+    setMessages(prev => [...prev, { role:"customer", original:text }]);
+    try {
+      const target = (localStorage.getItem("targetLang") || "EN").toUpperCase();
+      const r = await fetch("/api/v1/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, target })
+      });
+      const j = await r.json();
+      const tr = j?.translation || "";
+      setMessages(prev => {
+        const idx = prev.length - 1;
+        const next = [...prev];
+        next[idx] = { ...next[idx], translated: tr };
+        return next;
+      });
+    } catch(e:any) {
+      setErr(e?.message || "translation_failed");
+    }
+  }
+
+  return (
+    <main className="min-h-screen p-6 md:p-10 max-w-4xl mx-auto">
+      <div className="mb-4">
+        <StatusBar listening={listening} />
+      </div>
+
+      <div className="rounded-2xl bg-white shadow-soft p-4 mb-4">
+        <MessageList items={messages} />
+      </div>
+
+      <div className="flex items-center gap-4">
+        <VoiceCapture onText={handleRecognized} setListening={setListening} onError={(e)=>setErr(String(e))} />
+        {err && (
+          <span className="text-red-600" data-testid="error-text" role="status" aria-live="polite">
+            {err}
+          </span>
+        )}
+      </div>
+    </main>
+  );
+}

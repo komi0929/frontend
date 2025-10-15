@@ -1,0 +1,26 @@
+
+/* === Minimal styles for LP & banners === */
+.cookie-banner{position:fixed;left:1rem;right:1rem;bottom:1rem;background:#111;color:#fff;padding:12px;border-radius:12px;display:flex;gap:12px;align-items:center;justify-content:space-between;z-index:50}
+.cookie-banner .cookie-actions button{margin-left:6px;padding:6px 10px;border-radius:8px}
+.cookie-banner .btn-accept{background:#16a34a;color:#fff}
+.cookie-banner .btn-decline{background:#374151;color:#fff}
+
+.pinlock-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:60}
+.pinlock-card{background:#fff;padding:20px;border-radius:14px;min-width:280px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+.pinlock-title{font-size:18px;font-weight:700;margin-bottom:8px}
+.pinlock-input{border:1px solid #ddd;padding:10px 12px;border-radius:10px;width:100%;margin:6px 0 10px}
+.pinlock-actions{display:flex;gap:8px}
+.pinlock-btn{padding:8px 12px;border:1px solid #ddd;border-radius:10px;background:#fff}
+.pinlock-help{font-size:12px;color:#6b7280;margin-top:6px}
+
+/* Welcome page aids */
+.welcome-container{min-height:100vh;padding:32px;max-width:960px;margin:0 auto;position:relative}
+.settings-button{position:absolute;right:16px;top:16px;border:1px solid #e5e7eb;border-radius:12px;padding:4px 10px;background:#fff}
+.welcome-title{font-size:24px;font-weight:700;margin:16px 0 12px}
+.language-cards{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.language-card{border-radius:16px;border:1px solid #e5e7eb;padding:16px;background:#fff;box-shadow:0 1px 8px rgba(0,0,0,.04);cursor:pointer;outline:none}
+.language-card:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.language-card h2{font-weight:700;margin-bottom:6px}
+.tap-hint{font-size:12px;color:#6b7280}
+.footer-logo{margin-top:24px;color:#6b7280;text-align:center}
+.shadow-soft{box-shadow:0 2px 10px rgba(0,0,0,.06)}

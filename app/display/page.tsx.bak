@@ -1,0 +1,84 @@
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import { PinLock } from "@/components/security/PinLock";
+import { CookieBanner } from "@/components/CookieBanner";
+
+export default function Display(){
+  const [showLock,setShowLock]=useState(false);
+
+  function setLangAndGo(code: string){
+    try { localStorage.setItem("targetLang", code.toUpperCase()); } catch {}
+    location.href = "/display/live";
+  }
+
+  return (
+    <main className="welcome-container">
+      <button
+        className="settings-button"
+        data-testid="btn-settings"
+        aria-label="settings"
+        onClick={()=>setShowLock(true)}
+      >⚙️</button>
+
+      <h1 className="welcome-title" data-testid="welcome-language-prompt">
+        Please select your language
+      </h1>
+
+      <div className="language-cards">
+        <div
+          className="language-card english"
+          tabIndex={0}
+          data-testid="lang-en"
+          onClick={()=>setLangAndGo("EN")}
+          onKeyDown={(e)=>{ if(e.key==="Enter") setLangAndGo("EN"); }}
+        >
+          <h2>English</h2>
+          <p>If you have any questions,<br/>I'm here to help.</p>
+          <span className="tap-hint">👉 Tap here</span>
+        </div>
+
+        <div
+          className="language-card korean"
+          tabIndex={0}
+          data-testid="lang-ko"
+          onClick={()=>setLangAndGo("KO")}
+          onKeyDown={(e)=>{ if(e.key==="Enter") setLangAndGo("KO"); }}
+        >
+          <h2>한국어</h2>
+          <p>질문이 있으시면<br/>도와드리겠습니다.</p>
+          <span className="tap-hint">👉 선택</span>
+        </div>
+
+        <div
+          className="language-card chinese"
+          tabIndex={0}
+          data-testid="lang-zh"
+          onClick={()=>setLangAndGo("ZH")}
+          onKeyDown={(e)=>{ if(e.key==="Enter") setLangAndGo("ZH"); }}
+        >
+          <h2>中文</h2>
+          <p>如有任何问题，<br/>我会为您提供帮助。</p>
+          <span className="tap-hint">👉 点击</span>
+        </div>
+      </div>
+
+      <div className="footer-logo" data-testid="welcome-logo-footer">
+        あんしんディスプレイ
+      </div>
+
+      <section className="text-center mt-10">
+        <Link href="/admin/subscription" className="inline-block bg-[#F59E0B] text-white px-6 py-3 rounded-2xl">
+          マイク到着後14日 無料でお試し
+        </Link>
+      </section>
+
+      <section className="text-center mt-4">
+        <a className="underline text-sm" href="/display/live">デモを見る（マイク要許可）</a>
+      </section>
+
+      <CookieBanner />
+      {showLock && <PinLock><div /></PinLock>}
+    </main>
+  );
+}
