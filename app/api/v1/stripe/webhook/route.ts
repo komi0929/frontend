@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
+﻿import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { stripeClient } from "@/lib/stripe";
+import { getStripe } from "@/lib/stripe";
 import { sendMail } from "@/lib/mail";
 import * as Sentry from "@sentry/nextjs";
 
@@ -16,7 +16,7 @@ async function notifySlack(msg:string){
 
 export async function POST(req: Request) {
   const signature = headers().get("stripe-signature")!;
-  const stripe = stripeClient();
+  const stripe = getStripe()();
   const secret = process.env.STRIPE_WEBHOOK_SECRET!;
   try {
     const body = await req.text();
@@ -33,11 +33,11 @@ export async function POST(req: Request) {
         if (email) {
           await sendMail(
             email,
-            "【あんしんディスプレイ】お申し込みありがとうございます",
-            `<p>この度はお申し込みありがとうございます。</p>
-             <p>マイク到着後 <b>14日間</b> は無料でお試しいただけます。</p>
-             <p>ご請求情報の確認やお支払い方法の更新は、アプリ内「サブスクリプション管理」からいつでも可能です。</p>
-             <p><a href="${appUrl}/admin/subscription">サブスクリプション管理を開く</a></p>`
+            "縲舌≠繧薙＠繧薙ョ繧｣繧ｹ繝励Ξ繧､縲代♀逕ｳ縺苓ｾｼ縺ｿ縺ゅｊ縺後→縺・＃縺悶＞縺ｾ縺・,
+            `<p>縺薙・蠎ｦ縺ｯ縺顔筏縺苓ｾｼ縺ｿ縺ゅｊ縺後→縺・＃縺悶＞縺ｾ縺吶・/p>
+             <p>繝槭う繧ｯ蛻ｰ逹蠕・<b>14譌･髢・/b> 縺ｯ辟｡譁吶〒縺願ｩｦ縺励＞縺溘□縺代∪縺吶・/p>
+             <p>縺碑ｫ区ｱよュ蝣ｱ縺ｮ遒ｺ隱阪ｄ縺頑髪謇輔＞譁ｹ豕輔・譖ｴ譁ｰ縺ｯ縲√い繝励Μ蜀・後し繝悶せ繧ｯ繝ｪ繝励す繝ｧ繝ｳ邂｡逅・阪°繧峨＞縺､縺ｧ繧ょ庄閭ｽ縺ｧ縺吶・/p>
+             <p><a href="${appUrl}/admin/subscription">繧ｵ繝悶せ繧ｯ繝ｪ繝励す繝ｧ繝ｳ邂｡逅・ｒ髢九￥</a></p>`
           );
         }
       } catch (e:any) {

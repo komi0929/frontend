@@ -46,3 +46,6 @@ export function PinLock({ children }: { children?: React.ReactNode }){
     </div>
   );
 }
+export default PinLock;
+
+export default PinLock;
