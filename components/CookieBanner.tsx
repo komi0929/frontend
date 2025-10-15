@@ -19,12 +19,10 @@ export function CookieBanner(){
   return (
     <div className="cookie-banner" role="dialog" aria-label="cookie consent">
       <div className="cookie-text">
-        当サイトは体験改善のためCookieを使用します。
-        <a className="underline" href="/privacy">プライバシー</a> をご確認ください。
-      </div>
+        蠖薙し繧､繝医・菴馴ｨ捺隼蝟・・縺溘ａCookie繧剃ｽｿ逕ｨ縺励∪縺吶・        <a className="underline" href="/privacy">繝励Λ繧､繝舌す繝ｼ</a> 繧偵＃遒ｺ隱阪￥縺縺輔＞縲・      </div>
       <div className="cookie-actions">
-        <button className="btn-accept" onClick={()=>{ setCookie("anshin_consent","1"); setShow(false); }}>同意する</button>
-        <button className="btn-decline" onClick={()=>{ setCookie("anshin_consent","0"); setShow(false); }}>同意しない</button>
+        <button className="btn-accept" onClick={()=>{ setCookie("anshin_consent","1"); setShow(false); }}>蜷梧э縺吶ｋ</button>
+        <button className="btn-decline" onClick={()=>{ setCookie("anshin_consent","0"); setShow(false); }}>蜷梧э縺励↑縺・/button>
       </div>
     </div>
   );

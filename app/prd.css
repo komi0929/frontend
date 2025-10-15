@@ -1,18 +1,18 @@
 /* ===== PRD v2.2 Design Tokens / Base ===== */
 :root{
   /* Colors (v2.2) */
-  --bg-main:#F5F1E8;        /* 背景（温かいベージュ） */
+  --bg-main:#F5F1E8;        /* 閭梧勹・域ｸｩ縺九＞繝吶・繧ｸ繝･・・*/
   --bg-card:#FFFFFF;
   --bg-error:#FFE8D6;
   --border-error:#FFB88C;
 
   --text-primary:#5A5A5A;
   --text-secondary:#8B8B8B;
-  --text-translated:#6B9080; /* 翻訳テキスト色（v2.2） */
+  --text-translated:#6B9080; /* 鄙ｻ險ｳ繝・く繧ｹ繝郁牡・・2.2・・*/
   --text-white:#FFFFFF;
   --text-footer:#999999;
 
-  --accent-primary:#7FCDCD;  /* ミント系 */
+  --accent-primary:#7FCDCD;  /* 繝溘Φ繝育ｳｻ */
   --accent-secondary:#A8D5BA;
 
   --bar-customer:#7FCDCD;
@@ -93,7 +93,7 @@ body{
 .language-card:active{transform:scale(.98)}
 .language-card:focus{outline:3px solid rgba(255,255,255,.5);outline-offset:4px}
 
-/* English / Korean / Chinese カラー */
+/* English / Korean / Chinese 繧ｫ繝ｩ繝ｼ */
 .language-card.english{background:linear-gradient(135deg,#5EB8B8 0%,#4A9E9E 100%)}
 .language-card.english:hover{background:linear-gradient(135deg,#4A9E9E 0%,#368888 100%);transform:translateY(-8px);box-shadow:0 12px 32px rgba(94,184,184,.4)}
 .language-card.korean{background:linear-gradient(135deg,#D98A7A 0%,#C76E5E 100%)}
@@ -117,15 +117,15 @@ body{
   display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
   background:rgba(0,0,0,.9);color:#fff;padding:40px;border-radius:12px;text-align:center;z-index:9999;max-width:400px;
 }
-.orientation-warning::before{content:"📱→🖥️";font-size:48px;display:block;margin-bottom:16px}
-/* 小さすぎる画面 or 横x縦が小さい場合に警告を表示 */
+.orientation-warning::before{content:"導竊挺泱･・・;font-size:48px;display:block;margin-bottom:16px}
+/* 蟆上＆縺吶℃繧狗判髱｢ or 讓ｪx邵ｦ縺悟ｰ上＆縺・ｴ蜷医↓隴ｦ蜻翫ｒ陦ｨ遉ｺ */
 @media (max-width:767px), (max-height:599px){
   :root{--font-original:28px;--font-translated:36px;--font-button:28px}
   .size-warning{display:block}
 }
 @media (orientation:portrait){ .orientation-warning{display:block} }
 
-/* エラーオーバーレイ（3秒後フェード） */
+/* 繧ｨ繝ｩ繝ｼ繧ｪ繝ｼ繝舌・繝ｬ繧､・・遘貞ｾ後ヵ繧ｧ繝ｼ繝会ｼ・*/
 .error-overlay{
   position:fixed;bottom:80px;left:50%;transform:translateX(-50%);max-width:600px;width:90%;
   padding:24px;background:var(--bg-error);border:2px solid var(--border-error);
@@ -138,7 +138,7 @@ body{
 .error-message{font-size:20px;color:var(--text-primary);margin-bottom:8px}
 .error-ready{font-size:16px;color:var(--text-secondary)}
 
-/* メッセージ左バー（6px固定） */
+/* 繝｡繝・そ繝ｼ繧ｸ蟾ｦ繝舌・・・px蝗ｺ螳夲ｼ・*/
 .message{display:flex;gap:12px;margin-bottom:var(--space-between-messages)}
 .message-bar{width:var(--bar-width);border-radius:3px;background:var(--bar-customer);flex:0 0 var(--bar-width)}
 .message.staff .message-bar{background:var(--bar-staff)}
@@ -147,7 +147,7 @@ body{
 .translated{font-size:var(--font-translated);color:var(--text-translated);line-height:var(--line-height-translated)}
 .btn-scroll-latest{position:sticky;bottom:8px;margin-left:auto;padding:8px 12px;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
 
-/* アクセシビリティ */
+/* 繧｢繧ｯ繧ｻ繧ｷ繝薙Μ繝・ぅ */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 /* === PRD enforced: StatusBar & Mic === */
 .statusbar{display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #e5e7eb;border-radius:14px;background:#fff}
@@ -168,7 +168,7 @@ body{
 }
 .mic-button.active{
   transform:scale(0.96);
-  background:#C84C3A; /* �^�����͉������Ԍn */
+  background:#C84C3A; /* 録音中は温かい赤系 */
   box-shadow:0 6px 16px rgba(200,76,58,.35);
 }
 .mic-button::after{

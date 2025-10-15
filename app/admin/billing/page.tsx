@@ -34,16 +34,16 @@ export default function BillingPortal() {
       <h1 className="text-2xl font-bold mb-4">Billing / Customer Portal</h1>
       <div className="space-y-3">
         <div>
-          <label className="block text-sm mb-1">Customer ID（任意）</label>
+          <label className="block text-sm mb-1">Customer ID・井ｻｻ諢擾ｼ・/label>
           <input className="border rounded px-3 py-2 w-full" value={customerId} onChange={e=>setCustomerId(e.target.value)} placeholder="cus_..." />
         </div>
         <div>
-          <label className="block text-sm mb-1">Email（Customer IDがなければ）</label>
+          <label className="block text-sm mb-1">Email・・ustomer ID縺後↑縺代ｌ縺ｰ・・/label>
           <input className="border rounded px-3 py-2 w-full" value={email} onChange={e=>setEmail(e.target.value)} placeholder="user@example.com" />
         </div>
-        <button onClick={openPortal} disabled={busy} className="px-4 py-2 rounded text-white" style={{background:"#6B9080"}}>Portalを開く</button>
+        <button onClick={openPortal} disabled={busy} className="px-4 py-2 rounded text-white" style={{background:"#6B9080"}}>Portal繧帝幕縺・/button>
         {err && <p className="text-red-600 text-sm">{err}</p>}
-        <p className="text-xs text-gray-500 mt-4">※ どちらも未指定の場合は、環境変数 STRIPE_TEST_CUSTOMER_ID が使われます。</p>
+        <p className="text-xs text-gray-500 mt-4">窶ｻ 縺ｩ縺｡繧峨ｂ譛ｪ謖・ｮ壹・蝣ｴ蜷医・縲∫腸蠅・､画焚 STRIPE_TEST_CUSTOMER_ID 縺御ｽｿ繧上ｌ縺ｾ縺吶・/p>
       </div>
     </main>
   );

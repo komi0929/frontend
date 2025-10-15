@@ -5,7 +5,7 @@ export default function StatusBar({ listening }: { listening: boolean }){
   return (
     <div className="statusbar" data-testid="status-bar" role="status" aria-live="polite">
       <span className={`status-dot ${listening ? "listening" : "idle"}`} aria-hidden="true" />
-      <span className="status-text">{listening ? "リスニング中..." : "待機中"}</span>
+      <span className="status-text">{listening ? "繝ｪ繧ｹ繝九Φ繧ｰ荳ｭ..." : "蠕・ｩ滉ｸｭ"}</span>
     </div>
   );
 }

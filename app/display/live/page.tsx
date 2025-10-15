@@ -11,11 +11,9 @@ export default function DisplayLive(){
   const [messages, setMessages] = useState<Msg[]>([]);
   const [err, setErr] = useState("");
 
-  // エラーは3秒後に自動フェードアウト
-  useEffect(()=>{ if(err){ const t=setTimeout(()=>setErr(""),3000); return ()=>clearTimeout(t);} },[err]);
+  // 繧ｨ繝ｩ繝ｼ縺ｯ3遘貞ｾ後↓閾ｪ蜍輔ヵ繧ｧ繝ｼ繝峨い繧ｦ繝・  useEffect(()=>{ if(err){ const t=setTimeout(()=>setErr(""),3000); return ()=>clearTimeout(t);} },[err]);
 
-  // 会話コンテナ参照（「最新へ」スクロール用）
-  const convRef = useRef<HTMLDivElement>(null);
+  // 莨夊ｩｱ繧ｳ繝ｳ繝・リ蜿ら・・医梧怙譁ｰ縺ｸ縲阪せ繧ｯ繝ｭ繝ｼ繝ｫ逕ｨ・・  const convRef = useRef<HTMLDivElement>(null);
   const scrollToLatest = () => {
     const el = convRef.current;
     if (el) el.scrollTop = el.scrollHeight;
@@ -41,33 +39,33 @@ export default function DisplayLive(){
 
   return (
     <main className="min-h-screen p-6 md:p-10 max-w-4xl mx-auto">
-      {/* 画面が小さい/縦向き時の警告（CSSで制御） */}
-      <div className="size-warning">画面が小さすぎます。タブレット横向きを推奨します。</div>
-      <div className="orientation-warning">端末を横向きにしてください。</div>
+      {/* 逕ｻ髱｢縺悟ｰ上＆縺・邵ｦ蜷代″譎ゅ・隴ｦ蜻奇ｼ・SS縺ｧ蛻ｶ蠕｡・・*/}
+      <div className="size-warning">逕ｻ髱｢縺悟ｰ上＆縺吶℃縺ｾ縺吶ゅち繝悶Ξ繝・ヨ讓ｪ蜷代″繧呈耳螂ｨ縺励∪縺吶・/div>
+      <div className="orientation-warning">遶ｯ譛ｫ繧呈ｨｪ蜷代″縺ｫ縺励※縺上□縺輔＞縲・/div>
 
       <div className="mb-4">
         <StatusBar listening={listening} />
       </div>
 
-      {/* 会話コンテナ（testids） */}
+      {/* 莨夊ｩｱ繧ｳ繝ｳ繝・リ・・estids・・*/}
       <div ref={convRef} data-testid="conversation-container" className="rounded-2xl bg-white shadow-soft p-4 mb-2" style={{maxHeight:"60vh", overflowY:"auto"}}>
         <MessageList items={messages} />
       </div>
       <div style={{display:"flex", justifyContent:"flex-end"}}>
-        <button data-testid="btn-scroll-to-latest" className="btn-scroll-latest" onClick={scrollToLatest}>最新へ</button>
+        <button data-testid="btn-scroll-to-latest" className="btn-scroll-latest" onClick={scrollToLatest}>譛譁ｰ縺ｸ</button>
       </div>
 
       <div className="flex items-center gap-4 mt-4">
         <VoiceCapture onText={handleRecognized} setListening={setListening} onError={(e)=>setErr(String(e))} />
       </div>
 
-      {/* エラーオーバーレイ */}
+      {/* 繧ｨ繝ｩ繝ｼ繧ｪ繝ｼ繝舌・繝ｬ繧､ */}
       {err && (
         <div className="error-overlay" data-testid="error-overlay" role="status" aria-live="assertive">
-          <div className="error-icon">⚠️</div>
-          <div className="error-title" data-testid="error-title-ja">エラーが発生しました</div>
+          <div className="error-icon">笞・・/div>
+          <div className="error-title" data-testid="error-title-ja">繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆</div>
           <div className="error-message" data-testid="error-message-ja">{err}</div>
-          <div className="error-ready">数秒後に自動で閉じます</div>
+          <div className="error-ready">謨ｰ遘貞ｾ後↓閾ｪ蜍輔〒髢峨§縺ｾ縺・/div>
         </div>
       )}
     </main>

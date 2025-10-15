@@ -1,4 +1,4 @@
-﻿export default function Terms() {
+export default function Terms() {
   return (
     <main className="max-w-3xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">利用規約</h1>

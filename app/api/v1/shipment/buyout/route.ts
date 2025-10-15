@@ -14,19 +14,17 @@ export async function POST(req: Request) {
     const sub = await stripe.subscriptions.retrieve(subscriptionId);
     const customerId = typeof sub.customer === "string" ? sub.customer : (sub.customer as any).id;
 
-    // デフォルト決済手段が無い場合はエラー
+    // 繝・ヵ繧ｩ繝ｫ繝域ｱｺ貂域焔谿ｵ縺檎┌縺・ｴ蜷医・繧ｨ繝ｩ繝ｼ
     const cust = await stripe.customers.retrieve(customerId);
     const pm = (cust as any)?.invoice_settings?.default_payment_method;
     if (!pm) {
-      return NextResponse.json({ error: "顧客に支払方法が未設定です。Customer Portalでカードを登録してください。" }, { status: 400 });
+      return NextResponse.json({ error: "鬘ｧ螳｢縺ｫ謾ｯ謇墓婿豕輔′譛ｪ險ｭ螳壹〒縺吶・ustomer Portal縺ｧ繧ｫ繝ｼ繝峨ｒ逋ｻ骭ｲ縺励※縺上□縺輔＞縲・ }, { status: 400 });
     }
 
-    // 請求書を作成して即時課金
-    await stripe.invoiceItems.create({
+    // 隲区ｱよ嶌繧剃ｽ懈・縺励※蜊ｳ譎りｪｲ驥・    await stripe.invoiceItems.create({
       customer: customerId,
       currency: "jpy",
-      amount, // ¥1,000 既定（環境変数で上書き可）
-      description: reason,
+      amount, // ﾂ･1,000 譌｢螳夲ｼ育腸蠅・､画焚縺ｧ荳頑嶌縺榊庄・・      description: reason,
     });
     const invoice = await stripe.invoices.create({
       customer: customerId,

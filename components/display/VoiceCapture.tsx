@@ -24,20 +24,17 @@ export default function VoiceCapture({ onText, setListening, onError }: Props) {
 
   async function begin() {
     try {
-      if (!navigator.mediaDevices?.getUserMedia) throw new Error("このブラウザは録音に対応していません。");
-      // すでに録音中なら無視
-      if (recording) return;
+      if (!navigator.mediaDevices?.getUserMedia) throw new Error("縺薙・繝悶Λ繧ｦ繧ｶ縺ｯ骭ｲ髻ｳ縺ｫ蟇ｾ蠢懊＠縺ｦ縺・∪縺帙ｓ縲・);
+      // 縺吶〒縺ｫ骭ｲ髻ｳ荳ｭ縺ｪ繧臥┌隕・      if (recording) return;
 
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
 
-      // Safari等配慮: mimeType を可能なら設定
-      let mime = "audio/webm";
+      // Safari遲蛾・諷ｮ: mimeType 繧貞庄閭ｽ縺ｪ繧芽ｨｭ螳・      let mime = "audio/webm";
       const can = (window as any).MediaRecorder?.isTypeSupported;
       if (typeof can === "function") {
         if (!can(mime)) mime = "audio/webm;codecs=opus";
-        if (!can(mime)) mime = ""; // ブラウザ任せ
-      }
+        if (!can(mime)) mime = ""; // 繝悶Λ繧ｦ繧ｶ莉ｻ縺・      }
 
       const rec = mime ? new MediaRecorder(stream, { mimeType: mime as any }) : new MediaRecorder(stream);
       recRef.current = rec;
@@ -49,13 +46,11 @@ export default function VoiceCapture({ onText, setListening, onError }: Props) {
         try {
           const blob = new Blob(chunksRef.current, { type: rec.mimeType || "audio/webm" });
           const durMs = Math.max(0, Date.now() - startTsRef.current);
-          const tooShort = durMs < 350;                 // 0.35秒未満は短すぎ
-          const tooSmall = blob.size < 2048;            // 2KB未満は短すぎとみなす
-
+          const tooShort = durMs < 350;                 // 0.35遘呈悴貅縺ｯ遏ｭ縺吶℃
+          const tooSmall = blob.size < 2048;            // 2KB譛ｪ貅縺ｯ遏ｭ縺吶℃縺ｨ縺ｿ縺ｪ縺・
           if (tooShort || tooSmall) {
-            onError?.("音声が短すぎます。もう少し長押しして話してください。");
-            return; // STTは呼ばない
-          }
+            onError?.("髻ｳ螢ｰ縺檎洒縺吶℃縺ｾ縺吶ゅｂ縺・ｰ代＠髟ｷ謚ｼ縺励＠縺ｦ隧ｱ縺励※縺上□縺輔＞縲・);
+            return; // STT縺ｯ蜻ｼ縺ｰ縺ｪ縺・          }
 
           const base64 = await blobToBase64(blob);
           const audioBase64 = base64.split(",")[1] || "";
@@ -69,7 +64,7 @@ export default function VoiceCapture({ onText, setListening, onError }: Props) {
           if (!res.ok) throw new Error(j?.error || "stt_error");
           const text = String(j?.text || "");
           if (!text.trim()) {
-            onError?.("音声を認識できませんでした。もう一度お試しください。");
+            onError?.("髻ｳ螢ｰ繧定ｪ崎ｭ倥〒縺阪∪縺帙ｓ縺ｧ縺励◆縲ゅｂ縺・ｸ蠎ｦ縺願ｩｦ縺励￥縺縺輔＞縲・);
             return;
           }
           onText(text);
@@ -82,7 +77,7 @@ export default function VoiceCapture({ onText, setListening, onError }: Props) {
       setRecording(true);
       setListening?.(true);
 
-      // 開始時の軽いハプティック
+      // 髢句ｧ区凾縺ｮ霆ｽ縺・ワ繝励ユ繧｣繝・け
       (navigator as any).vibrate?.(10);
     } catch (e: any) {
       setPressed(false);
@@ -98,8 +93,7 @@ export default function VoiceCapture({ onText, setListening, onError }: Props) {
     setRecording(false);
     setListening?.(false);
 
-    // 終了時のハプティック強化（短いパターン）
-    (navigator as any).vibrate?.([0, 20, 40, 20]);
+    // 邨ゆｺ・凾縺ｮ繝上・繝・ぅ繝・け蠑ｷ蛹厄ｼ育洒縺・ヱ繧ｿ繝ｼ繝ｳ・・    (navigator as any).vibrate?.([0, 20, 40, 20]);
   }
 
   function onPointerDown(e: React.PointerEvent) {
@@ -118,8 +112,7 @@ export default function VoiceCapture({ onText, setListening, onError }: Props) {
     setPressed(false);
   }
   function onPointerLeave(e: React.PointerEvent) {
-    // 押したまま外へ出たら終了扱い（誤操作対策）
-    if (pressed || recording) end();
+    // 謚ｼ縺励◆縺ｾ縺ｾ螟悶∈蜃ｺ縺溘ｉ邨ゆｺ・桶縺・ｼ郁ｪ､謫堺ｽ懷ｯｾ遲厄ｼ・    if (pressed || recording) end();
     setPressed(false);
   }
 
@@ -127,7 +120,7 @@ export default function VoiceCapture({ onText, setListening, onError }: Props) {
 
   return (
     <div data-testid="mic-icon" className="mic-wrap" aria-live="polite">
-      {/* 録音中の赤いブラーリング（息づかい） */}
+      {/* 骭ｲ髻ｳ荳ｭ縺ｮ襍､縺・ヶ繝ｩ繝ｼ繝ｪ繝ｳ繧ｰ・域・縺･縺九＞・・*/}
       <div className={`mic-ambient ${active ? "on" : ""}`} aria-hidden="true">
         <span className="mic-breath" />
       </div>
@@ -135,7 +128,7 @@ export default function VoiceCapture({ onText, setListening, onError }: Props) {
       <button
         type="button"
         data-testid="mic-button"
-        aria-label={recording ? "録音中" : "長押しで話す"}
+        aria-label={recording ? "骭ｲ髻ｳ荳ｭ" : "髟ｷ謚ｼ縺励〒隧ｱ縺・}
         className={`mic-button ${active ? "active" : ""}`}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
@@ -147,7 +140,7 @@ export default function VoiceCapture({ onText, setListening, onError }: Props) {
           <path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2ZM11 17h2v3h3v2H8v-2h3v-3Z"/>
         </svg>
       </button>
-      <div className="mic-help">{recording ? "話してください..." : "長押しで話す"}</div>
+      <div className="mic-help">{recording ? "隧ｱ縺励※縺上□縺輔＞..." : "髟ｷ謚ｼ縺励〒隧ｱ縺・}</div>
     </div>
   );
 }

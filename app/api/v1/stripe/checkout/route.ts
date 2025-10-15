@@ -14,14 +14,14 @@ export async function POST(req: Request) {
     const stripe = new Stripe(sk, { apiVersion: "2024-06-20" });
     const { need_mic=true, policy_mic_return_ack=true, trial_period_days=7 } = await req.json().catch(()=>({}));
 
-    // 価格IDの live/test ミスマッチを事前検知
+    // 萓｡譬ｼID縺ｮ live/test 繝溘せ繝槭ャ繝√ｒ莠句燕讀懃衍
     const priceId = process.env.STRIPE_PRICE_ID!;
     const price = await stripe.prices.retrieve(priceId);
     const keyLive = detectLiveKey(sk);
     if (price.livemode !== keyLive) {
       return NextResponse.json({
-        error: `Stripe設定エラー: 使用中のキー(${keyLive ? "live" : "test"})と価格ID(${price.livemode ? "live" : "test"})のモードが異なります。`,
-        hint: "Stripeダッシュボードで同じモードのPrice IDを指定してください。"
+        error: `Stripe險ｭ螳壹お繝ｩ繝ｼ: 菴ｿ逕ｨ荳ｭ縺ｮ繧ｭ繝ｼ(${keyLive ? "live" : "test"})縺ｨ萓｡譬ｼID(${price.livemode ? "live" : "test"})縺ｮ繝｢繝ｼ繝峨′逡ｰ縺ｪ繧翫∪縺吶Ａ,
+        hint: "Stripe繝繝・す繝･繝懊・繝峨〒蜷後§繝｢繝ｼ繝峨・Price ID繧呈欠螳壹＠縺ｦ縺上□縺輔＞縲・
       }, { status: 400 });
     }
 

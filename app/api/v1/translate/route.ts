@@ -76,7 +76,7 @@ export async function POST(req: Request) {
     const text = (body?.text || "").toString();
     if (!text) return NextResponse.json({ error: "text is required" }, { status: 400 });
 
-    // target優先順位: body.target > Cookie(anshin_target_lang) > EN
+    // target蜆ｪ蜈磯・ｽ・ body.target > Cookie(anshin_target_lang) > EN
     const cookieLang = getCookie(req, "anshin_target_lang");
     const target = norm(body?.target || cookieLang || "EN");
     const source = body?.source ? norm(body.source) : null;

@@ -5,8 +5,8 @@ import React from "react";
 const noto = Noto_Sans_JP({ subsets: ["latin"], weight: ["400","700"] });
 
 export const metadata = {
-  title: "あんしんディスプレイ",
-  description: "リアルタイム通訳ディスプレイ",
+  title: "縺ゅｓ縺励ｓ繝・ぅ繧ｹ繝励Ξ繧､",
+  description: "繝ｪ繧｢繝ｫ繧ｿ繧､繝騾夊ｨｳ繝・ぅ繧ｹ繝励Ξ繧､",
   manifest: "/manifest.json",
 };
 

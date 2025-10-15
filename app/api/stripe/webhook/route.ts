@@ -9,7 +9,7 @@ export const maxDuration = 60;
 export async function POST(req: Request) {
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!secret) {
-    // 開発時の無効化用
+    // 髢狗匱譎ゅ・辟｡蜉ｹ蛹也畑
     return NextResponse.json({ warning: "STRIPE_WEBHOOK_SECRET not set; webhook disabled" }, { status: 200 });
   }
   const stripe = getStripe();
@@ -32,8 +32,8 @@ export async function POST(req: Request) {
           email = (cust as any)?.email || email;
         }
         if (email) {
-          await sendEmail(email, "ご登録ありがとうございます（決済完了）",
-            `<p>ご利用ありがとうございます。サブスクリプションが開始されました。</p>`);
+          await sendEmail(email, "縺皮匳骭ｲ縺ゅｊ縺後→縺・＃縺悶＞縺ｾ縺呻ｼ域ｱｺ貂亥ｮ御ｺ・ｼ・,
+            `<p>縺泌茜逕ｨ縺ゅｊ縺後→縺・＃縺悶＞縺ｾ縺吶ゅし繝悶せ繧ｯ繝ｪ繝励す繝ｧ繝ｳ縺碁幕蟋九＆繧後∪縺励◆縲・/p>`);
         }
         break;
       }
@@ -45,8 +45,8 @@ export async function POST(req: Request) {
           email = (cust as any)?.email || email;
         }
         if (email) {
-          await sendEmail(email, "お支払いに失敗しました",
-            `<p>お支払いに失敗しました。お手数ですが<a href='/admin/subscription'>お支払い方法の更新</a>をお願いします。</p>`);
+          await sendEmail(email, "縺頑髪謇輔＞縺ｫ螟ｱ謨励＠縺ｾ縺励◆",
+            `<p>縺頑髪謇輔＞縺ｫ螟ｱ謨励＠縺ｾ縺励◆縲ゅ♀謇区焚縺ｧ縺吶′<a href='/admin/subscription'>縺頑髪謇輔＞譁ｹ豕輔・譖ｴ譁ｰ</a>繧偵♀鬘倥＞縺励∪縺吶・/p>`);
         }
         break;
       }
@@ -54,8 +54,7 @@ export async function POST(req: Request) {
       case "customer.subscription.updated":
       case "customer.subscription.deleted":
       default:
-        // 必須処理なし（必要に応じて拡張）
-        break;
+        // 蠢・亥・逅・↑縺暦ｼ亥ｿ・ｦ√↓蠢懊§縺ｦ諡｡蠑ｵ・・        break;
     }
     return NextResponse.json({ received: true });
   } catch (e: any) {

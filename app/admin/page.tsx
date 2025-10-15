@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 export default function AdminDashboard() {
   return (
     <main className="p-8 text-center">

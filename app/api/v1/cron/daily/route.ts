@@ -36,9 +36,9 @@ export async function GET() {
             const endDate = new Date(te*1000).toLocaleDateString("ja-JP");
             await sendMail(
               email,
-              "【あと3日でご請求】無料期間が終了します",
-              `<p>無料期間は <b>${endDate}</b> に終了します。</p>
-               <p>継続しない場合は期日までにキャンセルをご検討ください。</p>`
+              "縲舌≠縺ｨ3譌･縺ｧ縺碑ｫ区ｱゅ醍┌譁呎悄髢薙′邨ゆｺ・＠縺ｾ縺・,
+              `<p>辟｡譁呎悄髢薙・ <b>${endDate}</b> 縺ｫ邨ゆｺ・＠縺ｾ縺吶・/p>
+               <p>邯咏ｶ壹＠縺ｪ縺・ｴ蜷医・譛滓律縺ｾ縺ｧ縺ｫ繧ｭ繝｣繝ｳ繧ｻ繝ｫ繧偵＃讀懆ｨ弱￥縺縺輔＞縲・/p>`
             );
             await stripe.subscriptions.update(sub.id, { metadata: { ...meta, notice3d:"1" } });
             sent++;
