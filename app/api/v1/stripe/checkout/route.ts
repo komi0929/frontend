@@ -1,54 +1,60 @@
 import { NextResponse } from "next/server";
-import Stripe from "stripe";
+import { getStripe, isLiveMode, siteOrigin } from "@/lib/stripe";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 
-function detectLiveKey(sk: string){
-  return sk?.startsWith("sk_live_");
-}
+type Body = { mode?: "checkout" | "portal" };
 
 export async function POST(req: Request) {
   try {
-    const sk = process.env.STRIPE_SECRET_KEY!;
-    const stripe = new Stripe(sk, { apiVersion: "2024-06-20" });
-    const { need_mic=true, policy_mic_return_ack=true, trial_period_days=7 } = await req.json().catch(()=>({}));
+    const stripe = getStripe();
+    const body = (await req.json().catch(() => ({}))) as Body;
+    const mode = body?.mode || "checkout";
+    const origin = siteOrigin();
+    const successUrl = `${origin}/success`;
+    const cancelUrl = `${origin}/cancel`;
 
-    // 萓｡譬ｼID縺ｮ live/test 繝溘せ繝槭ャ繝√ｒ莠句燕讀懃衍
-    const priceId = process.env.STRIPE_PRICE_ID!;
-    const price = await stripe.prices.retrieve(priceId);
-    const keyLive = detectLiveKey(sk);
-    if (price.livemode !== keyLive) {
-      return NextResponse.json({
-        error: `Stripe險ｭ螳壹お繝ｩ繝ｼ: 菴ｿ逕ｨ荳ｭ縺ｮ繧ｭ繝ｼ(${keyLive ? "live" : "test"})縺ｨ萓｡譬ｼID(${price.livemode ? "live" : "test"})縺ｮ繝｢繝ｼ繝峨′逡ｰ縺ｪ繧翫∪縺吶Ａ,
-        hint: "Stripe繝繝・す繝･繝懊・繝峨〒蜷後§繝｢繝ｼ繝峨・Price ID繧呈欠螳壹＠縺ｦ縺上□縺輔＞縲・
-      }, { status: 400 });
+    if (mode === "portal") {
+      // 顧客ポータルは既存の Customer ID が必要
+      const customerId =
+        process.env.STRIPE_CUSTOMER_ID_FOR_PORTAL || "";
+      if (!customerId) {
+        return NextResponse.json(
+          { error: "顧客ポータルを開くには Customer ID が必要です。STRIPE_CUSTOMER_ID_FOR_PORTAL を設定してください。" },
+          { status: 400 }
+        );
+      }
+      const session = await stripe.billingPortal.sessions.create({
+        customer: customerId,
+        return_url: origin,
+      });
+      return NextResponse.json({ url: session.url });
     }
 
-    const success = new URL(process.env.STRIPE_SUCCESS_URL || "http://localhost:3000/success");
-    success.searchParams.set("session_id", "{CHECKOUT_SESSION_ID}");
-    const cancel = process.env.STRIPE_CANCEL_URL || "http://localhost:3000/cancel";
+    // CHECKOUT: サブスク（PRD既定：7日トライアル）
+    const price = isLiveMode()
+      ? process.env.STRIPE_LIVE_PRICE_ID
+      : process.env.STRIPE_TEST_PRICE_ID;
+    if (!price) {
+      return NextResponse.json(
+        { error: `価格IDが未設定です: ${isLiveMode() ? "STRIPE_LIVE_PRICE_ID" : "STRIPE_TEST_PRICE_ID"}` },
+        { status: 500 }
+      );
+    }
+    const trialDays = Number(process.env.SUBSCRIPTION_TRIAL_DAYS || 7);
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
-      line_items: [{ price: priceId, quantity: 1 }],
-      payment_method_collection: "always",
-      subscription_data: {
-        trial_period_days,
-        metadata: {
-          plan: "anshin_display_monthly",
-          need_mic: need_mic ? "1" : "0",
-          policy_mic_return_ack: policy_mic_return_ack ? "1" : "0"
-        }
-      },
-      success_url: success.toString(),
-      cancel_url: cancel,
-      allow_promotion_codes: true
+      success_url: successUrl,
+      cancel_url: cancelUrl,
+      allow_promotion_codes: true,
+      line_items: [{ price, quantity: 1 }],
+      subscription_data: { trial_period_days: trialDays },
     });
-
     return NextResponse.json({ url: session.url });
-  } catch(e:any) {
-    console.error("Stripe checkout error:", e);
-    return NextResponse.json({ error: e?.message || "checkout_error" }, { status: 500 });
+  } catch (err: any) {
+    return NextResponse.json({ error: err?.message || "checkout_failed" }, { status: 500 });
   }
 }

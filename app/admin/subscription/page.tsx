@@ -1,11 +1,10 @@
-﻿"use client";
+"use client";
 import React, { useState } from "react";
 
 /**
  * サブスクリプション（7日トライアル）
  * - 「7日間無料で試す」: /api/v1/stripe/checkout に POST (mode: "checkout")
  * - 「顧客ポータルを開く」: /api/v1/stripe/checkout に POST (mode: "portal")
- * ※ どちらもレスポンスJSONに { url } が返る前提（PRDどおり）
  */
 export default function SubscriptionPage() {
   const [loading, setLoading] = useState<null | "checkout" | "portal">(null);
@@ -25,10 +24,7 @@ export default function SubscriptionPage() {
         window.location.href = data.url;
         return;
       }
-      setErr(
-        data?.error ||
-          "Checkout セッションの作成に失敗しました。Stripeの価格ID/キー設定をご確認ください。"
-      );
+      setErr(data?.error || "Checkout セッションの作成に失敗しました。Stripeの価格ID/キー設定をご確認ください。");
     } catch (e: any) {
       setErr(e?.message || "Checkout セッションの作成に失敗しました。");
     } finally {
