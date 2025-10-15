@@ -1,121 +1,62 @@
 ﻿"use client";
+import React, { useEffect, useRef } from "react";
 
-import { useEffect, useRef, useState } from "react";
-import { Message, Language } from "../types";
+type Message = {
+  id: string;
+  text: string;
+  sender: "user" | "system";
+};
 
-interface MessageListProps {
+export default function MessageList({
+  messages,
+  isUserScrolling,
+}: {
   messages: Message[];
-  selectedLanguage: Language;
-}
-
-export default function MessageList({ messages, selectedLanguage }: MessageListProps) {
+  isUserScrolling: boolean;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [showScrollButton, setShowScrollButton] = useState(false);
-  const [isUserScrolling, setIsUserScrolling] = useState(false);
-  const prevMessageCountRef = useRef(0);
+  const prevMessageCountRef = useRef<number>(0);
 
-  // 閾ｪ蜍輔せ繧ｯ繝ｭ繝ｼ繝ｫ・医Θ繝ｼ繧ｶ繝ｼ縺梧焔蜍輔せ繧ｯ繝ｭ繝ｼ繝ｫ荳ｭ縺ｧ縺ｪ縺・ｴ蜷医・縺ｿ・・  useEffect(() => {
-    if (!isUserScrolling && containerRef.current) {
-      containerRef.current.scrollTo({
-        top: containerRef.current.scrollHeight,
-        behavior: 'smooth',
-      });
+  useEffect(() => {
+    // メッセージが新しく追加された時のみスクロールを調整
+    if (
+      !isUserScrolling &&
+      messages.length > prevMessageCountRef.current &&
+      containerRef.current
+    ) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
     }
     prevMessageCountRef.current = messages.length;
   }, [messages, isUserScrolling]);
 
-  // 繧ｹ繧ｯ繝ｭ繝ｼ繝ｫ菴咲ｽｮ縺ｮ逶｣隕・  const handleScroll = () => {
+  // スクロール位置の監視
+  const handleScroll = () => {
     if (!containerRef.current) return;
-
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-    const isAtBottom = scrollHeight - scrollTop - clientHeight < 100;
-    
-    // 譁ｰ逹繝｡繝・そ繝ｼ繧ｸ縺後≠繧翫∵怙荳矩Κ縺ｫ縺・↑縺・ｴ蜷医・縺ｿ繝懊ち繝ｳ陦ｨ遉ｺ
-    const hasNewMessages = messages.length > prevMessageCountRef.current;
-    const shouldShowButton = !isAtBottom && hasNewMessages;
-
-    setShowScrollButton(shouldShowButton);
-    setIsUserScrolling(!isAtBottom);
-  };
-
-  // 譛譁ｰ縺ｸ繧ｹ繧ｯ繝ｭ繝ｼ繝ｫ
-  const scrollToLatest = () => {
-    if (containerRef.current) {
-      containerRef.current.scrollTo({
-        top: containerRef.current.scrollHeight,
-        behavior: 'smooth',
-      });
-      setIsUserScrolling(false);
-      setShowScrollButton(false);
+    const atBottom = scrollTop + clientHeight >= scrollHeight - 20;
+    if (atBottom) {
+      // ユーザーが最下部までスクロールした時の挙動
     }
   };
 
   return (
-    <>
-      <div
-        ref={containerRef}
-        className="conversation-container"
-        onScroll={handleScroll}
-        data-testid="conversation-container"
-      >
-        <div className="scroll-hint" data-testid="scroll-hint">
-          繧ｹ繧ｯ繝ｭ繝ｼ繝ｫ蜿ｯ閭ｽ 竊・        </div>
-
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`message ${message.isComplete ? 'complete' : ''} ${
-              message.detectedLanguage === 'ja' ? 'staff' : 'customer'
-            }`}
-            data-testid={`message-${message.id}`}
-          >
-            {/* 蟾ｦ繝舌・・郁ｩｱ閠・玄蛻･・・*/}
-            <div
-              className={`message-bar ${
-                message.detectedLanguage === 'ja' ? 'staff' : 'customer'
-              }`}
-              data-testid={`message-bar-${message.id}`}
-            />
-
-            {/* 蜴滓枚 */}
-            <div
-              className="original-text"
-              data-testid={`original-text-${message.id}`}
-            >
-              {message.originalText}
-            </div>
-
-            {/* 鄙ｻ險ｳ */}
-            {message.isComplete ? (
-              <div
-                className="translated-text"
-                data-testid={`translated-text-${message.id}`}
-              >
-                {message.translatedText}
-              </div>
-            ) : (
-              <div
-                className="translation-spinner"
-                data-testid={`translation-spinner-${message.id}`}
-              >
-                <span className="spinner-icon">売</span>
-                鄙ｻ險ｳ荳ｭ...
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* 縲梧怙譁ｰ縺ｸ縲阪・繧ｿ繝ｳ */}
-      {showScrollButton && (
-        <button
-          className="scroll-to-latest"
-          onClick={scrollToLatest}
-          data-testid="btn-scroll-to-latest"
+    <div
+      ref={containerRef}
+      onScroll={handleScroll}
+      className="overflow-y-auto p-4 border rounded-lg bg-white h-[400px]"
+    >
+      {messages.map((msg) => (
+        <div
+          key={msg.id}
+          className={`mb-2 p-2 rounded-lg ${
+            msg.sender === "user"
+              ? "bg-green-100 text-right"
+              : "bg-gray-100 text-left"
+          }`}
         >
-          竊・譛譁ｰ縺ｸ
-        </button>
-      )}
-    </>
+          {msg.text}
+        </div>
+      ))}
+    </div>
   );
 }
